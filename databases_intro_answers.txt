@@ -1,0 +1,77 @@
+1. What data types do each of these values represent?
+
+"A Clockwork Orange" - string
+42 - integer
+09/02/1945 - date
+98.7 - decimal/float
+$15.99 - decimal/float/money/currency/
+
+2. Explain when a database would be used. Explain when a text file would be used.
+    A. A database would be used when the number of records becomes large and/or when two or more instances of a program might be running.
+    Multiple program instances operating against the same text file may result in locked files and/or lost data. A text file would be used
+    for small sets of data or data that wouldn't very seldom need to be changed. 
+
+3. Describe one difference between SQL and other programming languages.
+    A. SQL is declarative, not procedural. Programmers don't have to be concerned with the 'how' of retrieving data, just the 'what'. 
+
+4. In your own words, explain how the pieces of a database system fit together at a high level.
+    A. A database is essentially a table, or spreadsheet, with columns labeled according to the data they hold, rows that contain multiple cells
+    that related to one unit. 
+
+5. Explain the meaning of table, row, column, and value.
+    A.  Table - structure used to store related data
+        Row - made of individual cells, or pieces of data, that make up a complete unit
+        Column - sections of the table that contain the same type of data, for each row/unit
+        Value - specific piece of information that the column describes, as it relates to it's corresponding unit/row
+
+6. List three data types that can be used in a table.
+    A. string, date, numbers/integers
+
+7. Given this payments table, provide an English description of the following queries and include their results:
+
+     SELECT date, amount
+     FROM payments;
+     I want the data and amount from the payments table (for all records).
+        date	amount
+    2016-05-01	1500
+    2016-05-10	37
+    2016-05-15	124.93
+    2016-05-23	54.72
+
+
+     SELECT amount
+     FROM payments
+     WHERE amount > 500;
+    I want the amount from the payments table where the amount is greater than 500
+        amount
+    1500
+
+
+     SELECT *
+     FROM payments
+     WHERE payee = 'Mega Foods';
+    I want all records from the payments table with a payee of 'Mega Foods'
+        date	payee	amount	memo
+    2016-05-15	Mega Foods	124.93	Groceries
+
+
+8. Given this users table, write SQL queries using the following criteria and include the output:
+
+The email and sign-up date for the user named DeAndre Data.
+    select email, signup
+    from users
+    where name = 'DeAndre Data'
+        email	signup
+    datad@comcast.net	2008-01-20
+
+The user ID for the user with email 'aleesia.algorithm@uw.edu'.
+    select userid from users
+    where email = 'aleesia.algorithm@uw.edu'
+        userid
+    1
+
+All the columns for the user ID equal to 4.
+    select * from users
+    where userid = 4
+        userid	name	email	signup
+    4	Brandy Boolean	bboolean@nasa.gov	1999-10-15
