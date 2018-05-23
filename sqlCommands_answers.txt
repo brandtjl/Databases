@@ -1,0 +1,115 @@
+1. List the commands for adding, updating, and deleting data.
+    A. INSERT INTO, UPDATE, DELETE FROM 
+
+2. Explain the structure for each type of command.
+    A.  INSERT INTO filename (column1_name, column2_name, . . . ) values('value1', 'value2', ...);
+        UPDATE filename set column_name = value where other_column_name = value;
+        DELETE FROM filename where column_name = value;
+
+3. What are some of the data types that can be used in tables? Give a real-world example of each type.
+    A. decimal or money for salaries, character for names, date or timestamp for date/time that an order was placed, numeric for a persons age 
+
+4. Decide how to create a new table to hold a list of people invited to a wedding dinner. 
+The table needs to have first and last names, whether they sent in their RSVP, the number of guests they are bringing, 
+and the number of meals (1 for adults and 1/2 for children).
+    Which data type would you use to store each of the following pieces of information?
+        First and last name. - varchar
+        Whether they sent in their RSVP. - boolean
+        Number of guests. - numeric
+        Number of meals. - decimal
+    Write a command that creates the table to track the wedding dinner.
+        CREATE TABLE guests  (firstname, lastname, rsvp, num_of_guests, meals);
+    Write a command that adds a column to track whether the guest sent a thank you card.
+        ALTER TABLE guests ADD COLUMN thank_you boolean SET DEFAULT false;
+    You have decided to move the data about the meals to another table, 
+    so write a command to remove the column storing the number meals from the wedding table.
+        ALTER TABLE guests DROP COLUMN meals;
+    The guests will need a place to sit at the reception, so write a command that adds a column for table number.
+        ALTER TABLE guests ADD COLUMN table_number SET DEFAULT 0;
+    The wedding is over and we do not need to keep this information, so write a command that deletes the table numbers from the database.
+        ALTER TABLE guests DROP COLUMN table_number;
+
+5. Write a command to create a new table to hold the books in a library with the columns 
+ISBN, title, author, genre, publishing date, number of copies, and available copies.
+    A. CREATE TABLE books (
+        isbn varchar, 
+        title varchar, 
+        author varchar, 
+        genre varchar, 
+        publish_date numeric, 
+        total_copies numeric,
+        available_copies numeric  );
+
+    Find three books and add their information to the table.
+        INSERT INTO books (isbn, title, author, genre, publish_date, total_copies, available_copies) 
+            values('978-1-4165-4997-0', 'The Broken Window', 'Jeffery Deaver', 'Mystery', 2008, 2, 1);
+        INSERT INTO books (isbn, title, author, genre, publish_date, total_copies, available_copies) 
+            values('978-0-312-36806-7', 'Quicksand', 'Iris Johansen', 'Mystery ', 2008, 1, 1);
+        INSERT INTO books (isbn, title, author, genre, publish_date, total_copies, available_copies) 
+            values('978-1-4165-7086-8', 'Just Take My Heart', 'Mary Higgins Clark', 'Mystery', 2009, 1, 0);
+
+    Someone has just checked out one of the books. Change the number of available copies to 1 fewer.
+        UPDATE books SET available_copies = available_copies -1 where title = 'Quicksand';
+
+    Now one of the books has been added to the banned books list. Remove it from the table.
+        DELETE FROM books where title = 'Just Take My Heart';
+
+6. Write a command to make a new table to hold spacecrafts. Information should include id, name, year launched, country of origin, 
+a brief description of the mission, orbiting body, if it is currently operating, and its approximate miles from Earth. 
+    CREATE TABLE spacecrafts (
+        id varchar, 
+        name varchar, 
+        launch_year numeric,
+        country character,
+        mission varchar,
+        orbiting_body varchar,
+        operating boolean,
+        miles_from_earth varchar );
+
+    In addition to the table creation, provide commands that perform the following operations:
+    Add three non-Earth-orbiting satellites to the table.
+        INSERT INTO spacecrafts (id, name, launch_year, country, mission, orbiting_body, operating, miles_from_earth)
+            VALUES (1, 'STEREO', 2006, 'USA', 'solar observation, 'sun', true, 'unknown');
+        INSERT INTO spacecrafts (id, name, launch_year, country, mission, orbiting_body, operating, miles_from_earth)
+            VALUES (2, 'Spitzer', 2003, 'USA', 'infrared space telescope, 'sun', true, 'unknown');
+        INSERT INTO spacecrafts (id, name, launch_year, country, mission, orbiting_body, operating, miles_from_earth)
+            VALUES (3, 'Kepler', 2009, 'USA', 'space observation, 'sun', true, 'unknown');
+
+    Remove one of the satellites from the table since it has just crashed into the planet.
+        DELETE FROM spacecrafts where name = 'Kepler';
+
+    Edit another satellite because it is no longer operating and change the value to reflect that.
+        UPDATE spacecrafts set operating = false where name = 'STEREO';
+
+7. Write a command to create a new table to hold the emails in your inbox. 
+This table should include an id, the subject line, the sender, any additional recipients, the body of the email, the timestamp, 
+whether or not you have read the email, and the id of the email chain it's in. 
+    CREATE TABLE emails (
+        id numeric,
+        subject varchar,
+        sender varchar,
+        recipients varchar,
+        body varchar,
+        time_sent timestamp,
+        email_read boolean,
+        email_chain_id decimal );
+
+Also provide commands that perform the following operations:
+
+Add three new emails to the inbox.
+    INSERT INTO inbox (id, subject, sender, recipients, body, time_sent, email_read, email_chain_id)
+        VALUES (1, 'test', 'jenibrandt@legalshieldcorp.com', 'jdbrandt4@hotmail.com', 'Just letting you know its time to go to bed',
+        '2018-05-23 08:15:00', true, 1.1);
+    INSERT INTO inbox (id, subject, sender, recipients, body, time_sent, email_read, email_chain_id)
+        VALUES (2, 'assignment', 'jenibrandt@test.com', 'jdbrandt4@gmail.com', 'Submit assignment',
+        '2018-05-21 13:41:00', false, 2.1);
+    INSERT INTO inbox (id, subject, sender, recipients, body, time_sent, email_read, email_chain_id)
+        VALUES (3, 'schedule', 'jenibrandt@hotmail.com', 'jdbrandt4@gmail.com', 'Its time to set class schedule.',
+        '2018-05-20 12:11:40', true, 3.1);
+
+You deleted one of the emails, so write a command to remove the row from the inbox table.
+    DELETE FROM inbox where id=3;
+
+You started reading an email but just heard a crash in another room. Mark the email as unread before investigating the crash, 
+so you can come back and read it later.
+    UPDATE inbox set email_read=false where id = 2;
