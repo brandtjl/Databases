@@ -1,0 +1,127 @@
+1. How do you find related data held in two separate data tables?
+    A. Use a join statement combines information from two tables using the tables' primary keys.
+
+2. Explain, in your own words, the difference between an INNER JOIN, LEFT OUTER JOIN, and RIGHT OUTER JOIN. 
+Give a real-world example for each.
+    A. An inner join will result in one row for each match on the primary/foreign key. Can be used when looking for an insured members name
+        from one table and and all associated insurance policies from another table. 
+    A left outer join will result in one row for each match on the primary/foreign keys as well as an additional row for each
+        of the records from table 1 that don't have a match in table 2 (with null values from table 2). Can be used when looking for a list of
+        all insured members from one table and all of their dependents, if they have any, from a second table.
+    A right outer join will result in one row for each match on the primary/foreign keys as well as an
+        additional row for each of records from table 2 that don't have a match in table 1 (with null values from table 1). Can be used when
+        looking for a list of all employees that have insurance coverage from one table but still want the employee information from another
+        table even if they don't have insurance coverage.
+
+3. Define primary key and foreign key. Give a real-world example for each.
+    A. A primary key is an identifier in a table that will occur only once in that table. A foreign key is the matching data in another 
+    table. The foreign key is usually a small detail in a table of other identifying information. 
+    In a table of employee information, an employee id would be the primary key. The employee id could also be an identifying column
+    in a table of employee dependents. 
+
+4. Define aliasing.
+    A. Aliasing is simply assigning an alternate name or abbreviation to a table that is used when differentiating which columns to use. 
+
+5. Change this query so that you are using aliasing:
+    SELECT professor.name, compensation.salary,
+    compensation.vacation_days FROM professor JOIN
+    compensation ON professor.id =
+    compensation.professor_id;
+        A. SELECT p.name, c.salary, c.vacation_days FROM professor AS p JOIN compensation AS c ON p.id = c.professor_id;
+
+6. Why would you use a NATURAL JOIN? Give a real-world example.
+    You would use a natural join when two tables have several columns with the same names. You could use a natural join on employee tables
+    when searching employee payroll info. Employee name, salary deposited, deposit account from one table and would match same date in a 
+    payroll deposit table with all employee payroll payments.  
+
+7. Using this Employee schema and data, write queries to find the following information:
+List all employees and all shifts.
+    select employees.id, name, date, start_time, end_time
+    from employees
+    left outer join scheduled_shifts
+    on employees.id = scheduled_shifts.employee_id
+    left outer join shifts 
+    on shifts.id = scheduled_shifts.shift_id
+
+8. Using this Adoption schema and data, please write queries to retrieve the following information and include the results:
+Create a list of all volunteers. If the volunteer is fostering a dog, include each dog as well.
+    select first_name, last_name, name
+    from volunteers
+    left outer join dogs 
+    on foster_dog_id = dogs.id
+            first_name	last_name	name
+            Rubeus	Hagrid	Munchkin
+            Marjorie	Dursley	Marmaduke
+            Sirius	Black	(null)
+            Remus	Lupin	(null)
+            Albus	Dumbledore	(null)
+The cat's name, adopter's name, and adopted date for each cat adopted within the past month to be displayed 
+as part of the "Happy Tail" social media promotion which posts recent successful adoptions.
+    select cats.name, adopters.first_name, adopters.last_name, cat_adoptions.date
+    from cats
+    join cat_adoptions
+    on cat_adoptions.cat_id = cats.id
+    join adopters
+    on adopters.id = cat_adoptions.adopter_id
+    where cat_adoptions.date > '2018-04-23';
+        name	first_name	last_name	date
+        Mushi	Arabella	Figg	2018-05-03
+        Victoire	Argus	Filch	2018-05-08
+
+Create a list of adopters who have not yet chosen a dog to adopt. - the way I wrote this one was not covered in this checkpoint, I was 
+only able to do this because I've used SQL a lot in my current job. I was unable to get any sort of a join to work.
+    select adopters.first_name, adopters.last_name
+    from adopters 
+    where id not in(select adopter_id from dog_adoptions);
+        first_name	last_name
+        Hermione	Granger
+        Arabella	Figg
+Lists of all cats and all dogs who have not been adopted. - again, was not able to generate correct results when using just what has
+been discussed in the checkpoints, so I used prior SQL knowledge
+    select cats.name
+        from cats
+        where id 
+        not in (select cat_id from cat_adoptions)
+        union
+        select dogs.name
+        from dogs
+        where id
+        not in(select dog_id from dog_adoptions);
+                name
+            Munchkin
+            Nala
+            Marley
+            Marmaduke
+            Seashell
+            Boujee
+            Lassie
+The name of the person who adopted Rosco.
+    select first_name, last_name
+    from adopters
+    join dog_adoptions
+    on id=adopter_id;
+        first_name	last_name
+        Argus	Filch
+
+9. Using this Library schema and data, write queries applying the following scenarios and include the results:
+To determine if the library should buy more copies of a given book, please provide the names and position, 
+in order, of all of the patrons with a hold (request for a book with all copies checked out) on "Advanced Potion-Making".
+    select patrons.name, rank
+    from patrons
+    join holds
+    on patrons.id = holds.patron_id
+    join books
+    on books.isbn = holds.isbn
+    where books.title = 'Advanced Potion-Making';
+        name	rank
+    Cedric Diggory	2
+    Terry Boot	1
+List all of the library patrons. If they have one or more books checked out, list the books with the patrons.
+    select name, checked_in_date
+    from patrons
+    left join transactions
+    on transactions.patron_id = patrons.id
+    This select statement will essentially get all employees and their check_in_date from the transactions table. I have been 
+    unable to figure out how to display a column based on 'IF' another column exists. I would have to display a book name IF the
+    checked_in_date is null (which. . . I couldn't even get the select statement to recognize checked_in_date = null in a simple
+    SELECT statement). . .is this a little too advanced for where we are at? 
